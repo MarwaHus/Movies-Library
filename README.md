@@ -4,7 +4,7 @@
 
 ## WRRC
 
-![WRRC](WRRC.PNG)
+![WRRC](wrrcapi.PNG)
 
 ## Overview
 
@@ -14,7 +14,7 @@
 
 - Create a new project folder
 - Initialize the project: Run "npm init -y"
-- Install dependencies: Use "npm install" 
+- Install dependencies: Use "npm install"
 - Create the app
 - Test the app:by running "node server.js"
 - Deploy the app
@@ -24,8 +24,8 @@
 - Create routes with there methods.
   - Home
   - Favorite
-- Create two functions 
   - server error
   - page not found error
-- use get request.
-
+-This project makes two requests to the Movie DB API:
+  1- /trending: Gets the data for the first trending movie
+  2-/search: Search for a movie name to get its information
