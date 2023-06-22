@@ -21,11 +21,11 @@
 
 ## Project Features
 <!-- What are the features included in you app -->
--Create routes with there methods.
-    -Home
-    -Favorite
--Create two functions 
-    - server error
-    - page not found error
--use get request.
+- Create routes with there methods.
+  - Home
+  - Favorite
+- Create two functions 
+  - server error
+  - page not found error
+- use get request.
 
