@@ -1,13 +1,29 @@
 "use strict"
 
 const express = require("express");
+const cors=require("cors");
 const app =express();
 require("dotenv").config();
+
 const cors=require("cors");
 app.use(cors());
 app.use(express.json()); 
+
 const data=require("./Movie-data/data.json")
 const axios =require("axios");
+app.use(cors());
+app.use(express.json());
+const db_url=process.env.DATABASE;
+const client= new pg.Client(db_url);
+
+const PORT = process.env.PORT;
+client.connect().then(()=> {
+  app.listen(PORT, () => {
+    console.log(`Listening at ${PORT}`);
+  });
+});
+
+
 function Movie (title,genre_ids,original_language,original_title,poster_path,video,vote_average,
   overview,release_date,vote_count,id,adult,backdrop_path,popularity,media_type)
   {
@@ -58,7 +74,9 @@ function handelFavorite(req,res){
 //----------------------------------------//
 app.get("/trending",async(req,res)=>{
  // let tm =  req.query.m;
+
   let axiosRes= await axios.get(`${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`);
+
 //`${process.env.TRENDING_MOVIES}?movie=${tm}`
 const filteredMovies= axiosRes.data.results.filter(movie =>movie.title === "Spider-Man: No Way Home");
 const trend=filteredMovies.map(movie=>({id:movie.id,
@@ -69,11 +87,12 @@ const trend=filteredMovies.map(movie=>({id:movie.id,
   res.send(trend);
 });
 /*app.get("/trending", async (req, res) => {
- // const url = `${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`;
+  const url =(`${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`);
 
-    const response = await axios.get(`${process.env.TRENDING_MOVIES}?api_key=37ddc7081e348bf246a42f3be2b3dfd0&language=en-US`);
 
-    const results = response.data.results.filter(item => item.media_type === "movie" || item.media_type === "tv")
+    const response = await axios.get(`${url}&language=en-US`);
+
+    const results = response.data.results.filter(item => item.title==="Spider-Man:No Way Home")
     .map(item => {
         const {
           id,
@@ -106,6 +125,7 @@ res.send(getData);
 //--------------------------------------//
 app.get("/search", async (req, res) => {
   
+
     const searchName = req.query.s;
    // const page = req.query.page; 
     const response = await axios.get(`${process.env.SEARCH_MOVEIS}?api_key=${process.env.API_KEY}&language=en-US&query=${searchName}&page=2`)
@@ -133,14 +153,15 @@ app.get("/search", async (req, res) => {
       };
     });
 
-    const responseData = {
-      total_results: response.data.total_results,
-      total_pages: response.data.total_pages,
-      results
-    };
-    res.send(responseData);
 
-  } 
+  const responseData = {
+    total_results: response.data.total_results,
+    total_pages: response.data.total_pages,
+    results
+  };
+  res.send(responseData);
+
+} 
 );
 //-----------------------------------------//
 app.get("/getId" ,async(req,res)=>{
@@ -156,7 +177,28 @@ app.get("/getAlter",async(req,res)=>{
   res.send(axiosA.data);
 })
 
-//---------------------------------------//
+//------------------------------------------------//Lab 13
+app.post("/addMovie",(req,res)=>{
+let movie_Id=req.body.i;
+let title=req.body.t;
+let year=req.body.y;
+  //let {i,t,y}=req.body;
+ 
+  let sql =`insert into movie(movie_id,title,year)values($1,$2,$3)`;
+  client.query(sql,[movie_Id,title,year]).then(()=>{
+    res.status(201).send(`Movie id: ${movie_Id} title: ${title} year ${year} is added `);
+  });
+//res.send(req.body);
+});
+//-----------------------------------------//
+app.get("/getMovies",(req,res)=>{
+  let sql =`select * from movie`;
+  client.query(sql).then((movieData)=>{
+res.status(200).send(movieData.rows);
+  });
+});
+
+//---------------------------------------//Lab13
   app.use((req, res, next) => {
     res.status(404).send({
       code: 404,
@@ -174,8 +216,8 @@ app.get("/getAlter",async(req,res)=>{
   }); 
   
   //----------------------------------//
-app.listen(3000,startingLog);
-function startingLog(req,res){
-    console.log("running at 3000");
-}
+//  app.listen(3000,startingLog);
+//  function startingLog(req,res){
+//      console.log("running at 3000");
+//  }
 

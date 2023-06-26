@@ -4,7 +4,7 @@
 
 ## WRRC
 
-![WRRC](wrrcapi.PNG)
+![WRRC](lab13.PNG)
 
 ## Overview
 
@@ -26,6 +26,9 @@
   - Favorite
   - server error
   - page not found error
--This project makes two requests to the Movie DB API:
+- This project makes two requests to the Movie DB API:
   1- /trending: Gets the data for the first trending movie
-  2-/search: Search for a movie name to get its information
+  2- /search: Search for a movie name to get its information
+- Set database to save and read data
+  1- create a post request (/addMovie)taht will sava movie id,title and year.
+  2- Create a get request (/getMovies)to get all the data from the database
