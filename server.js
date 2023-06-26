@@ -3,6 +3,9 @@
 const express = require("express");
 const app =express();
 require("dotenv").config();
+const cors=require("cors");
+app.use(cors());
+app.use(express.json()); 
 const data=require("./Movie-data/data.json")
 const axios =require("axios");
 function Movie (title,genre_ids,original_language,original_title,poster_path,video,vote_average,
@@ -53,19 +56,19 @@ function handelFavorite(req,res){
     res.send("Welcome to Favorite Page");
 }
 //----------------------------------------//
-/*app.get("/trending",async(req,res)=>{
+app.get("/trending",async(req,res)=>{
  // let tm =  req.query.m;
-  let axiosRes= await axios.get('https://api.themoviedb.org/3/trending/all/week?api_key=37ddc7081e348bf246a42f3be2b3dfd0&language=en-US');
+  let axiosRes= await axios.get(`${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`);
 //`${process.env.TRENDING_MOVIES}?movie=${tm}`
-const filteredMovies= axiosRes.data.results.filter(movie =>movie.title === "Spider-Man: Across the Spider-Verse");
+const filteredMovies= axiosRes.data.results.filter(movie =>movie.title === "Spider-Man: No Way Home");
 const trend=filteredMovies.map(movie=>({id:movie.id,
                                         title:movie.title,
                                         release_date:movie.release_date,
                                         poster_path:movie.poster_path,
                                         overview:movie.overview}));
   res.send(trend);
-});*/
-app.get("/trending", async (req, res) => {
+});
+/*app.get("/trending", async (req, res) => {
  // const url = `${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`;
 
     const response = await axios.get(`${process.env.TRENDING_MOVIES}?api_key=37ddc7081e348bf246a42f3be2b3dfd0&language=en-US`);
@@ -99,15 +102,13 @@ app.get("/trending", async (req, res) => {
     };
 res.send(getData);
 
-});
+});*/
 //--------------------------------------//
-
-
 app.get("/search", async (req, res) => {
   
     const searchName = req.query.s;
    // const page = req.query.page; 
-    const response = await axios.get(`${process.env.SEARCH_MOVEIS}?api_key=668baa4bb128a32b82fe0c15b21dd699&language=en-US&query=${searchName}&page=2`)
+    const response = await axios.get(`${process.env.SEARCH_MOVEIS}?api_key=${process.env.API_KEY}&language=en-US&query=${searchName}&page=2`)
     const results = response.data.results.map(movie => {
       const {
         id,
@@ -141,6 +142,19 @@ app.get("/search", async (req, res) => {
 
   } 
 );
+//-----------------------------------------//
+app.get("/getId" ,async(req,res)=>{
+let id=req.query.i;
+let axiosId= await axios.get(`${process.env.ID_MOVIES}/${id}?api_key=${process.env.API_KEY}&language=en-US`);
+res.send(axiosId.data);
+})
+
+app.get("/getAlter",async(req,res)=>{
+
+
+  let axiosA = ("https://api.themoviedb.org/3/movie/55/alternative_titles?api_key=0f71d03dfb252d35a99a459077ad04c3&language=en-US`");
+  res.send(axiosA.data);
+})
 
 //---------------------------------------//
   app.use((req, res, next) => {
