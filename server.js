@@ -5,7 +5,7 @@ const app =express();
 require("dotenv").config();
 const cors=require("cors");
 app.use(cors());
-app.use(express.json()); 
+//app.use(express.json()); 
 const data=require("./Movie-data/data.json")
 const axios =require("axios");
 function Movie (title,genre_ids,original_language,original_title,poster_path,video,vote_average,
@@ -56,53 +56,19 @@ function handelFavorite(req,res){
     res.send("Welcome to Favorite Page");
 }
 //----------------------------------------//
-app.get("/trending",async(req,res)=>{
- // let tm =  req.query.m;
+app.get("/trending", async(req,res)=>{
   let axiosRes= await axios.get(`${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`);
-//`${process.env.TRENDING_MOVIES}?movie=${tm}`
-const filteredMovies= axiosRes.data.results.filter(movie =>movie.title === "Spider-Man: No Way Home");
-const trend=filteredMovies.map(movie=>({id:movie.id,
-                                        title:movie.title,
-                                        release_date:movie.release_date,
-                                        poster_path:movie.poster_path,
-                                        overview:movie.overview}));
-  res.send(trend);
+  const trendingMovies = axiosRes.data.results;
+  const movieData = trendingMovies.find(movie => movie.id === 634649);
+  const filteredMovie = {id:movie.id,
+    title:movie.original_title,
+    release_date:movie.release_date,
+    poster_path:movie.poster_path,
+    overview:movie.overview}
+
+  res.send(filteredMovie);
 });
-/*app.get("/trending", async (req, res) => {
- // const url = `${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`;
 
-    const response = await axios.get(`${process.env.TRENDING_MOVIES}?api_key=37ddc7081e348bf246a42f3be2b3dfd0&language=en-US`);
-
-    const results = response.data.results.filter(item => item.media_type === "movie" || item.media_type === "tv")
-    .map(item => {
-        const {
-          id,
-          title,
-          overview,
-          poster_path,
-          release_date,
-          vote_count
-        } = item;
-        return {
-          id,
-          title,
-          release_date,
-          poster_path, 
-          overview,
-          vote_count
-         
-        };
-      })
-      .sort((a, b) => b.vote_count - a.vote_count); 
-
-    const getData={
-      total_pages: response.data.total_pages,
-      total_results: results.length,
-      results: results
-    };
-res.send(getData);
-
-});*/
 //--------------------------------------//
 app.get("/search", async (req, res) => {
   
@@ -149,12 +115,20 @@ let axiosId= await axios.get(`${process.env.ID_MOVIES}/${id}?api_key=${process.e
 res.send(axiosId.data);
 })
 
-app.get("/getAlter",async(req,res)=>{
+app.get('/topRatedAction2021', async (req, res) => {
+    const response = await axios.get(`${process.env.TOP}?api_key=${process.env.API_KEY}&language=en-US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&primary_release_year=2021&with_genres=28`);
+    const topRatedAction2021 = response.data.results.map(movie => {
+      return { 
+        id: movie.id,
+        title: movie.title,
+        release_date: movie.release_date,
+        genres: movie.genre_ids
+      }
+    });
+    res.send(topRatedAction2021)
+});
 
 
-  let axiosA = ("https://api.themoviedb.org/3/movie/55/alternative_titles?api_key=0f71d03dfb252d35a99a459077ad04c3&language=en-US`");
-  res.send(axiosA.data);
-})
 
 //---------------------------------------//
   app.use((req, res, next) => {

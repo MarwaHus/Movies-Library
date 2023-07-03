@@ -26,6 +26,8 @@
   - Favorite
   - server error
   - page not found error
--This project makes two requests to the Movie DB API:
-  1- /trending: Gets the data for the first trending movie
-  2-/search: Search for a movie name to get its information
+- This project makes two requests to the Movie DB API:
+  - /trending: Gets the data for the first trending movie
+  - /search: Search for a movie name to get its information
+  - /getId: Search for a movie id to get its information
+  - /topRatedAction2021: get topRated movies in 2021
