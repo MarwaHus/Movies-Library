@@ -7,7 +7,8 @@ require("dotenv").config();
 
 const cors=require("cors");
 app.use(cors());
-app.use(express.json()); 
+
+//app.use(express.json()); 
 
 const data=require("./Movie-data/data.json")
 const axios =require("axios");
@@ -134,12 +135,20 @@ let axiosId= await axios.get(`${process.env.ID_MOVIES}/${id}?api_key=${process.e
 res.send(axiosId.data);
 })
 
-app.get("/getAlter",async(req,res)=>{
+app.get('/topRatedAction2021', async (req, res) => {
+    const response = await axios.get(`${process.env.TOP}?api_key=${process.env.API_KEY}&language=en-US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&primary_release_year=2021&with_genres=28`);
+    const topRatedAction2021 = response.data.results.map(movie => {
+      return { 
+        id: movie.id,
+        title: movie.title,
+        release_date: movie.release_date,
+        genres: movie.genre_ids
+      }
+    });
+    res.send(topRatedAction2021)
+});
 
 
-  let axiosA = ("https://api.themoviedb.org/3/movie/55/alternative_titles?api_key=0f71d03dfb252d35a99a459077ad04c3&language=en-US`");
-  res.send(axiosA.data);
-})
 
 //------------------------------------------------//Lab 13
 app.post("/addMovie",(req,res)=>{
