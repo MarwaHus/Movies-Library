@@ -143,14 +143,12 @@ app.get("/getAlter",async(req,res)=>{
 
 //------------------------------------------------//Lab 13
 app.post("/addMovie",(req,res)=>{
-let movie_Id=req.body.i;
 let title=req.body.t;
-let year=req.body.y;
-  //let {i,t,y}=req.body;
- 
-  let sql =`insert into movie(movie_id,title,year)values($1,$2,$3)`;
-  client.query(sql,[movie_Id,title,year]).then(()=>{
-    res.status(201).send(`Movie id: ${movie_Id} title: ${title} year ${year} is added `);
+let overview=req.body.o;
+let comment=req.body.c;
+  let sql =`insert into movie(title,overview,comment)values($1,$2,$3)`;
+  client.query(sql,[title,overview,comment]).then(()=>{
+    res.status(201).send(` title: ${title}, overview:${overview} , commit ${comment} is added `);
   });
 //res.send(req.body);
 });
@@ -167,7 +165,7 @@ res.status(200).send(movieData.rows);
     res.status(404).send({
       code: 404,
       message: "Not Found",
-      extra: "you can visit only /, /favorite,/trending,/search routes only ",
+      extra: "you can visit only /, /favorite,/trending,/search ,/addMovie,/getMovies routes only ",
     });
   }); 
   
