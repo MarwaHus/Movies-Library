@@ -4,7 +4,7 @@
 
 ## WRRC
 
-![WRRC](wrrcapi.PNG)
+![WRRC](lab13.PNG)
 
 ## Overview
 
@@ -27,6 +27,7 @@
   - server error
   - page not found error
 - This project makes two requests to the Movie DB API:
+
   - /trending: Gets the data for the first trending movie
   - /search: Search for a movie name to get its information
   - /getId: Search for a movie id to get its information
