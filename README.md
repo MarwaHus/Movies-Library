@@ -4,7 +4,7 @@
 
 ## WRRC
 
-![WRRC](lab13.PNG)
+![WRRC](lab14.PNG)
 
 ## Overview
 
@@ -34,4 +34,6 @@
    4. /topRatedAction2021: get topRated movies in 2021
 - Set database to save and read data
    1. create a post request (/addMovie)taht will sava movie id,title and year.
-   2. Create a get request (/getMovies)to get all the data from the database. 
+   2. Create a get request (/getMovies)to get all the data from the database.
+   3. create a delete request (/DELETE/id) to delete a specific movie by id from database.
+   4. create a put request (/UPDATE/id) to update  comments for a specific movie in the database.
