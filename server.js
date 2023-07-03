@@ -68,52 +68,17 @@ function handelFavorite(req,res){
     res.send("Welcome to Favorite Page");
 }
 //----------------------------------------//
-/*app.get("/trending",async(req,res)=>{
- // let tm =  req.query.m;
-  let axiosRes= await axios.get(`${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US&page=1`);
-//`${process.env.TRENDING_MOVIES}?movie=${tm}`
-const filteredMovies= axiosRes.data.results.filter(movie =>movie.title === "Spider-Man: No Way Home");
-const trend=filteredMovies.map(movie=>({id:movie.id,
-                                        title:movie.title,
-                                        release_date:movie.release_date,
-                                        poster_path:movie.poster_path,
-                                        overview:movie.overview}));
-  res.send(trend);
-});*/
-app.get("/trending", async (req, res) => {
-  const url =(`${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`);
+app.get("/trending", async(req,res)=>{
+  let axiosRes= await axios.get(`${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`);
+  const trendingMovies = axiosRes.data.results;
+  const movieData = trendingMovies.find(movie => movie.id === 634649);
+  const filteredMovie = {id:movie.id,
+    title:movie.original_title,
+    release_date:movie.release_date,
+    poster_path:movie.poster_path,
+    overview:movie.overview}
 
-    const response = await axios.get(`${url}&language=en-US`);
-
-    const results = response.data.results.filter(item => item.title==="Spider-Man:No Way Home")
-    .map(item => {
-        const {
-          id,
-          title,
-          overview,
-          poster_path,
-          release_date,
-          vote_count
-        } = item;
-        return {
-          id,
-          title,
-          release_date,
-          poster_path, 
-          overview,
-          vote_count
-         
-        };
-      })
-      .sort((a, b) => b.vote_count - a.vote_count); 
-
-    const getData={
-      total_pages: response.data.total_pages,
-      total_results: results.length,
-      results: results
-    };
-res.send(getData);
-
+  res.send(filteredMovie);
 });
 //--------------------------------------//
 
