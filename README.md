@@ -28,7 +28,10 @@
   - page not found error
 - This project makes two requests to the Movie DB API:
 
-  - /trending: Gets the data for the first trending movie
-  - /search: Search for a movie name to get its information
-  - /getId: Search for a movie id to get its information
-  - /topRatedAction2021: get topRated movies in 2021
+   1. /trending: Gets the data for the first trending movie
+   2. /search: Search for a movie name to get its information
+   3. /getId: Search for a movie id to get its information
+   4. /topRatedAction2021: get topRated movies in 2021
+- Set database to save and read data
+   1. create a post request (/addMovie)taht will sava movie id,title and year.
+   2. Create a get request (/getMovies)to get all the data from the database. 
