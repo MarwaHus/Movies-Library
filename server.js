@@ -2,17 +2,18 @@
 
 const express = require("express");
 const cors=require("cors");
+const pg = require("pg");
 const app =express();
 require("dotenv").config();
 
-const cors=require("cors");
+//const cors=require("cors");
 app.use(cors());
 
 //app.use(express.json()); 
 
 const data=require("./Movie-data/data.json")
 const axios =require("axios");
-app.use(cors());
+
 app.use(express.json());
 const db_url=process.env.DATABASE;
 const client= new pg.Client(db_url);
@@ -155,6 +156,11 @@ app.post("/addMovie",(req,res)=>{
 let title=req.body.t;
 let overview=req.body.o;
 let comment=req.body.c;
+//{
+// "t":"",
+// "o":"",
+//  "c":""
+//}
   let sql =`insert into movie(title,overview,comment)values($1,$2,$3)`;
   client.query(sql,[title,overview,comment]).then(()=>{
     res.status(201).send(` title: ${title}, overview:${overview} , commit ${comment} is added `);
@@ -169,7 +175,40 @@ res.status(200).send(movieData.rows);
   });
 });
 
-//---------------------------------------//Lab13
+//---------------------------------------//Lab14
+app.delete("/DELETE/:id", async (req, res) => {
+  try {
+    let { id } = req.params;
+    let sql = `DELETE FROM movie WHERE id =${id}`;
+    let data = await client.query(sql);
+    res.status(204).end();
+  } catch (e) {
+    next("deleteCar " + e);
+  }
+});
+app.put("/UPDATE/:id",(req,res)=>{
+  try {
+    let {newComment}=req.body;
+    let sql=`UPDATE comment=$1 WHERE id =${req.params.id}`;
+    client.query(sql,[newComment]).then((data)=>{
+res.status(200).send('updated');
+    })
+ } catch (e) {
+  next("update movie " + e);
+  }
+})
+
+app.get("/getMovie/:id",async(req,res)=>{
+let sql=`SELECT * FROM movie WHERE id=${req.params.id}`;
+client.query(sql).then((movieData)=>{
+  res.status(200).send(movieData.rows);
+    });
+  });
+
+
+//---------------------------------------//
+
+
   app.use((req, res, next) => {
     res.status(404).send({
       code: 404,
