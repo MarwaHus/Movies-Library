@@ -186,12 +186,12 @@ app.delete("/DELETE/:id", async (req, res) => {
     next("deleteCar " + e);
   }
 });
-app.put("/UPDATE/:id",(req,res)=>{
+app.put("/UPDATE/:id",(req,res,next)=>{
   try {
     let {newComment}=req.body;
-    let sql=`UPDATE comment=$1 WHERE id =${req.params.id}`;
+    let sql=`UPDATE movie SET comment=$1 WHERE id =${req.params.id}`;
     client.query(sql,[newComment]).then((data)=>{
-res.status(200).send('updated');
+res.status(200).send('comment updeted');
     })
  } catch (e) {
   next("update movie " + e);
