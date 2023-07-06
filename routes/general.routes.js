@@ -1,6 +1,7 @@
 "use strict";
 const express=require("express");
 const axios = require("axios");
+const {TRENDING_MOVIES,API_KEY,SEARCH_MOVEIS,ID_MOVIES,TOP} = require("../configs");
 const Router=express.Router();
 
 
@@ -20,7 +21,7 @@ function handelFavorite(req,res){
 
 Router.get("/trending", async(req,res,next)=>{
   try{
-  let axiosRes= await axios.get(`${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`);
+  let axiosRes= await axios.get(`${TRENDING_MOVIES}?api_key=${API_KEY}&language=en-US`);
   const trendingMovies = axiosRes.data.results;
   const movieData = trendingMovies.find(movie => movie.id === 634649);
   const filteredMovie ={id:movie.id,
@@ -41,7 +42,7 @@ Router.get("/search", async (req, res) => {
 
     const searchName = req.query.s;
    // const page = req.query.page; 
-    const response = await axios.get(`${process.env.SEARCH_MOVEIS}?api_key=${process.env.API_KEY}&language=en-US&query=${searchName}&page=2`)
+    const response = await axios.get(`${SEARCH_MOVEIS}?api_key=${API_KEY}&language=en-US&query=${searchName}&page=2`)
     const results = response.data.results.map(movie => {
       const {
         id,
@@ -79,12 +80,12 @@ Router.get("/search", async (req, res) => {
 //-----------------------------------------//
 Router.get("/getId" ,async(req,res)=>{
 let id=req.query.i;
-let axiosId= await axios.get(`${process.env.ID_MOVIES}/${id}?api_key=${process.env.API_KEY}&language=en-US`);
+let axiosId= await axios.get(`${ID_MOVIES}/${id}?api_key=${API_KEY}&language=en-US`);
 res.send(axiosId.data);
 })
 
 Router.get('/topRatedAction2021', async (req, res) => {
-    const response = await axios.get(`${process.env.TOP}?api_key=${process.env.API_KEY}&language=en-US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&primary_release_year=2021&with_genres=28`);
+    const response = await axios.get(`${TOP}?api_key=${API_KEY}&language=en-US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&primary_release_year=2021&with_genres=28`);
     const topRatedAction2021 = response.data.results.map(movie => {
       return { 
         id: movie.id,
