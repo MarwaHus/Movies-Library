@@ -38,7 +38,7 @@ function handelFavorite(req,res){
 Router.get("/trending", async (req, res, next) => {
   try {
 
-    const axiosRes = await axios.get(`${process.env.TRENDING_MOVIES}?api_key=${API_KEY}&language=en-US`);
+    const axiosRes = await axios.get(`${TRENDING_MOVIES}?api_key=${API_KEY}&language=en-US`);
 
     const trendingMovies = axiosRes.data.results;
     res.send(trendingMovies);
