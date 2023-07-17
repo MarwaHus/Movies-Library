@@ -74,8 +74,6 @@ Router.get("/search", async (req, res) => {
         vote_average
       };
     });
-
-
   const responseData = {
     total_results: response.data.total_results,
     total_pages: response.data.total_pages,
@@ -104,5 +102,4 @@ Router.get('/topRatedAction2021', async (req, res) => {
     });
     res.send(topRatedAction2021)
 });
-
 module.exports=Router;
