@@ -18,7 +18,7 @@ function handelFavorite(req,res){
 }
 //----------------------------------------//
 
-Router.get("/trending", async(req,res,next)=>{
+/*Router.get("/trending", async(req,res,next)=>{
   try{
   let axiosRes= await axios.get(`${process.env.TRENDING_MOVIES}?api_key=${process.env.API_KEY}&language=en-US`);
   const trendingMovies = axiosRes.data.results;
@@ -32,6 +32,15 @@ Router.get("/trending", async(req,res,next)=>{
   res.send(filteredMovie);}
   catch(e){
     next("trending"+e)
+  }
+});*/
+Router.get("/trending", async (req, res, next) => {
+  try {
+    const axiosRes = await axios.get(`${process.env.TRENDING_MOVIES}?api_key=${API_KEY}&language=en-US`);
+    const trendingMovies = axiosRes.data.results;
+    res.send(trendingMovies);
+  } catch (error) {
+    next("trending" + error);
   }
 });
 
