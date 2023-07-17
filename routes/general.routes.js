@@ -19,23 +19,31 @@ function handelFavorite(req,res){
 }
 //----------------------------------------//
 
-Router.get("/trending", async(req,res,next)=>{
+/*Router.get("/trending", async(req,res,next)=>{
   try{
   let axiosRes= await axios.get(`${TRENDING_MOVIES}?api_key=${API_KEY}&language=en-US`);
   const trendingMovies = axiosRes.data.results;
   const movieData = trendingMovies.find(movie => movie.id === 634649);
-  const filteredMovie ={id:movie.id,
-    title:movie.original_title,
-    release_date:movie.release_date,
-    poster_path:movie.poster_path,
-    overview:movie.overview}
+ const filteredMovie ={id:movieData.id,
+    title:movieData.original_title,
+    release_date:movieData.release_date,
+    poster_path:movieData.poster_path,
+    overview:movieData.overview}
 
-  res.send(filteredMovie);}
+  res.send(trendingMovies);}
   catch(e){
     next("trending"+e)
   }
+});*/
+Router.get("/trending", async (req, res, next) => {
+  try {
+    const axiosRes = await axios.get(`${TRENDING_MOVIES}?api_key=${API_KEY}&language=en-US`);
+    const trendingMovies = axiosRes.data.results;
+    res.send(trendingMovies);
+  } catch (error) {
+    next("trending" + error);
+  }
 });
-
 //--------------------------------------//
 Router.get("/search", async (req, res) => {
   
